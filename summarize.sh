@@ -13,4 +13,4 @@ fi
 text=`cat <&0`
 textJson=`jq -RMc <<< "$text"`
 
-echo "Text received: $textJson"
+osascript -e "summarize $textJson"
