@@ -10,7 +10,14 @@ if ! command -v jq &> /dev/null; then
   exit 1
 fi
 
-text=`cat <&0`
+file="$1"
+
+if [ -f "$file" ]; then
+  text=`cat "$file"`
+else
+  text=`cat <&0`
+fi
+
 textJson=`jq -RMc <<< "$text"`
 
 osascript -e "summarize $textJson"
