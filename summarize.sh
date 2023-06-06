@@ -25,6 +25,7 @@ EOF
   exit 1
 }
 
+file="$1"
 sentences="1"
 
 while getopts "s:h" o; do
@@ -45,14 +46,11 @@ while getopts "s:h" o; do
 done
 shift $((OPTIND-1))
 
-file="$1"
-
-if [ -f "$file" ]; then
-  text=`cat "$file"`
-else
-  text=`cat <&0`
+if [ -z "$file" ]; then
+  file="/dev/stdin"
 fi
 
+text=`cat "$file"`
 textJson=`jq -RMcs . <<< "$text"`
 
 osascript -e "summarize $textJson in $sentences"
