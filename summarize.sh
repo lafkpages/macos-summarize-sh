@@ -5,4 +5,12 @@ if ! command -v osascript &> /dev/null; then
   exit 1
 fi
 
-echo "Sumarize here"
+if ! command -v jq &> /dev/null; then
+  echo "jq could not be found"
+  exit 1
+fi
+
+text=`cat <&0`
+textJson=`jq -RMc <<< "$text"`
+
+echo "Text received: $textJson"
