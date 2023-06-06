@@ -1,2 +1,3 @@
 # macos-summarize-sh
-A Bash utility for MacOS for summarising large texts.
+
+A Bash utility for MacOS for summarising large texts using AppleScript.
