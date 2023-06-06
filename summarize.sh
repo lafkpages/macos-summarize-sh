@@ -19,6 +19,7 @@ If no file is specified, will read from stdin. Otherwise, will read file.
 
 Options:
   -s [sentences]  Number of sentences to summarize to. Defaults to 1.
+  -c              Read from clipboard instead of file.
   -h              Show this help message.
 EOF
 
@@ -28,7 +29,9 @@ EOF
 file="$1"
 sentences="1"
 
-while getopts "s:h" o; do
+clipboard=""
+
+while getopts "s:ch" o; do
   case "${o}" in
     s)
       sentences=${OPTARG}
@@ -39,6 +42,11 @@ while getopts "s:h" o; do
       fi
 
       ;;
+    
+    c)
+      clipboard="1"
+      ;;
+
     *)
       usage
       ;;
@@ -50,7 +58,12 @@ if [ -z "$file" ]; then
   file="/dev/stdin"
 fi
 
-text=`cat "$file"`
+if [ "$clipboard" = 1 ]; then
+  text=`osascript -e 'the clipboard'`
+else
+  text=`cat "$file"`
+fi
+
 textJson=`jq -RMcs . <<< "$text"`
 
 osascript -e "summarize $textJson in $sentences"
